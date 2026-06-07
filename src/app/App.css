@@ -145,6 +145,11 @@ button:disabled {
   align-items: center;
 }
 
+.card-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+}
+
 .group-actions {
   display: flex;
   flex-wrap: wrap;
@@ -192,6 +197,13 @@ button:disabled {
   display: flex;
   gap: 10px;
   align-items: center;
+  min-width: 0;
+}
+
+.card-title p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .drag-handle {
@@ -221,13 +233,13 @@ button:disabled {
 
 .card-actions {
   display: grid;
-  grid-template-columns: minmax(84px, auto) minmax(74px, auto);
-  gap: 8px;
+  grid-template-columns: 76px 66px;
+  gap: 6px;
 }
 
 .card-actions button {
   min-width: 0;
-  padding-inline: 9px;
+  padding-inline: 6px;
   white-space: nowrap;
 }
 
@@ -439,6 +451,10 @@ textarea {
 
   .card-actions {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .card-title p {
+    white-space: normal;
   }
 
   .row-actions {
