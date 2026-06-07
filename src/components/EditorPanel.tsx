@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { DragEvent, ReactNode } from 'react'
 import { resumeFields } from '../data/initialResume'
 import type {
   EducationItem,
@@ -16,6 +16,13 @@ type EditorPanelProps = {
   onImport: (file: File) => void
   onPrint: () => void
   onReset: () => void
+}
+
+type DragList = 'experience' | 'education' | 'skills'
+
+type DragData = {
+  list: DragList
+  index: number
 }
 
 export function EditorPanel({
@@ -57,6 +64,27 @@ export function EditorPanel({
       skills: resume.skills.map((item) =>
         item.id === id ? { ...item, ...updates } : item,
       ),
+    })
+  }
+
+  const reorderExperience = (fromIndex: number, toIndex: number) => {
+    onResumeChange({
+      ...resume,
+      experience: reorderItems(resume.experience, fromIndex, toIndex),
+    })
+  }
+
+  const reorderEducation = (fromIndex: number, toIndex: number) => {
+    onResumeChange({
+      ...resume,
+      education: reorderItems(resume.education, fromIndex, toIndex),
+    })
+  }
+
+  const reorderSkills = (fromIndex: number, toIndex: number) => {
+    onResumeChange({
+      ...resume,
+      skills: reorderItems(resume.skills, fromIndex, toIndex),
     })
   }
 
@@ -148,6 +176,10 @@ export function EditorPanel({
             <EditableCard
               key={item.id}
               title={`Experience ${index + 1}`}
+              dragLabel={`${item.role || 'Experience item'} drag handle`}
+              dragList="experience"
+              dragIndex={index}
+              onDropItem={reorderExperience}
               onMoveUp={() =>
                 onResumeChange({
                   ...resume,
@@ -228,6 +260,10 @@ export function EditorPanel({
             <EditableCard
               key={item.id}
               title={`Education ${index + 1}`}
+              dragLabel={`${item.credential || 'Education item'} drag handle`}
+              dragList="education"
+              dragIndex={index}
+              onDropItem={reorderEducation}
               onMoveUp={() =>
                 onResumeChange({
                   ...resume,
@@ -293,7 +329,32 @@ export function EditorPanel({
           />
           <div className="skill-list">
             {resume.skills.map((item, index) => (
-              <div className="skill-editor-row" key={item.id}>
+              <div
+                className="skill-editor-row"
+                draggable
+                key={item.id}
+                onDragStart={(event) => {
+                  event.dataTransfer.effectAllowed = 'move'
+                  setDragData(event, 'skills', index)
+                }}
+                onDragOver={(event) => {
+                  event.preventDefault()
+                  event.dataTransfer.dropEffect = 'move'
+                }}
+                onDrop={(event) => {
+                  event.preventDefault()
+                  const dragData = getDragData(event)
+                  if (dragData?.list === 'skills') {
+                    reorderSkills(dragData.index, index)
+                  }
+                }}
+              >
+                <span
+                  className="drag-handle compact"
+                  aria-label={`${item.name || 'Skill'} drag handle`}
+                >
+                  ::::
+                </span>
                 <Field
                   label={`Skill ${index + 1}`}
                   value={item.name}
@@ -364,6 +425,10 @@ function GroupHeader({ title, onAdd }: { title: string; onAdd: () => void }) {
 function EditableCard({
   title,
   children,
+  dragLabel,
+  dragList,
+  dragIndex,
+  onDropItem,
   onMoveUp,
   onMoveDown,
   onRemove,
@@ -372,6 +437,10 @@ function EditableCard({
 }: {
   title: string
   children: ReactNode
+  dragLabel: string
+  dragList: DragList
+  dragIndex: number
+  onDropItem: (fromIndex: number, toIndex: number) => void
   onMoveUp: () => void
   onMoveDown: () => void
   onRemove: () => void
@@ -379,9 +448,32 @@ function EditableCard({
   disableMoveDown: boolean
 }) {
   return (
-    <article className="editable-card">
+    <article
+      className="editable-card"
+      draggable
+      onDragStart={(event) => {
+        event.dataTransfer.effectAllowed = 'move'
+        setDragData(event, dragList, dragIndex)
+      }}
+      onDragOver={(event) => {
+        event.preventDefault()
+        event.dataTransfer.dropEffect = 'move'
+      }}
+      onDrop={(event) => {
+        event.preventDefault()
+        const dragData = getDragData(event)
+        if (dragData?.list === dragList) {
+          onDropItem(dragData.index, dragIndex)
+        }
+      }}
+    >
       <div className="card-header">
-        <h3>{title}</h3>
+        <div className="card-title">
+          <span className="drag-handle" aria-label={dragLabel}>
+            ::::
+          </span>
+          <h3>{title}</h3>
+        </div>
         <div className="row-actions">
           <button
             type="button"
@@ -447,6 +539,54 @@ function moveItem<Item>(items: Item[], currentIndex: number, direction: -1 | 1) 
   const [item] = nextItems.splice(currentIndex, 1)
   nextItems.splice(nextIndex, 0, item)
   return nextItems
+}
+
+function reorderItems<Item>(items: Item[], fromIndex: number, toIndex: number) {
+  if (
+    Number.isNaN(fromIndex) ||
+    fromIndex === toIndex ||
+    fromIndex < 0 ||
+    toIndex < 0 ||
+    fromIndex >= items.length ||
+    toIndex >= items.length
+  ) {
+    return items
+  }
+
+  const nextItems = [...items]
+  const [item] = nextItems.splice(fromIndex, 1)
+  nextItems.splice(toIndex, 0, item)
+  return nextItems
+}
+
+function setDragData(
+  event: DragEvent<HTMLElement>,
+  list: DragList,
+  index: number,
+) {
+  const dragData: DragData = { list, index }
+  event.dataTransfer.setData('application/json', JSON.stringify(dragData))
+}
+
+function getDragData(event: DragEvent<HTMLElement>) {
+  try {
+    const dragData = JSON.parse(event.dataTransfer.getData('application/json'))
+    if (
+      isDragList(dragData.list) &&
+      typeof dragData.index === 'number' &&
+      Number.isInteger(dragData.index)
+    ) {
+      return dragData as DragData
+    }
+  } catch {
+    return null
+  }
+
+  return null
+}
+
+function isDragList(value: unknown): value is DragList {
+  return value === 'experience' || value === 'education' || value === 'skills'
 }
 
 function createId(prefix: string) {

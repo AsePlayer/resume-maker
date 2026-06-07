@@ -33,5 +33,6 @@ The app deploys to GitHub Pages from `main` using GitHub Actions.
 - Local browser autosave
 - Import / export resume JSON files
 - Structured experience, education, and skills sections
+- Drag-and-drop section reordering with button fallbacks
 - Browser print / PDF export
 - TypeScript data model for the resume shape
