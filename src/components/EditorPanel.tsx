@@ -1,4 +1,4 @@
-import type { DragEvent, ReactNode } from 'react'
+import { useState, type DragEvent, type ReactNode } from 'react'
 import { resumeFields } from '../data/initialResume'
 import type {
   EducationItem,
@@ -34,6 +34,14 @@ export function EditorPanel({
   onPrint,
   onReset,
 }: EditorPanelProps) {
+  const [collapsedCards, setCollapsedCards] = useState<Record<string, boolean>>(
+    {},
+  )
+
+  const toggleCollapsedCard = (id: string) => {
+    setCollapsedCards((current) => ({ ...current, [id]: !current[id] }))
+  }
+
   const updateExperience = (
     id: string,
     updates: Partial<Omit<ExperienceItem, 'id'>>,
@@ -176,6 +184,11 @@ export function EditorPanel({
             <EditableCard
               key={item.id}
               title={`Experience ${index + 1}`}
+              summary={[item.role, item.company, item.dates]
+                .filter(Boolean)
+                .join(' | ')}
+              isCollapsed={Boolean(collapsedCards[item.id])}
+              onToggleCollapsed={() => toggleCollapsedCard(item.id)}
               dragLabel={`${item.role || 'Experience item'} drag handle`}
               dragList="experience"
               dragIndex={index}
@@ -260,6 +273,9 @@ export function EditorPanel({
             <EditableCard
               key={item.id}
               title={`Education ${index + 1}`}
+              summary={[item.credential, item.school].filter(Boolean).join(' | ')}
+              isCollapsed={Boolean(collapsedCards[item.id])}
+              onToggleCollapsed={() => toggleCollapsedCard(item.id)}
               dragLabel={`${item.credential || 'Education item'} drag handle`}
               dragList="education"
               dragIndex={index}
@@ -424,7 +440,10 @@ function GroupHeader({ title, onAdd }: { title: string; onAdd: () => void }) {
 
 function EditableCard({
   title,
+  summary,
   children,
+  isCollapsed,
+  onToggleCollapsed,
   dragLabel,
   dragList,
   dragIndex,
@@ -436,7 +455,10 @@ function EditableCard({
   disableMoveDown,
 }: {
   title: string
+  summary: string
   children: ReactNode
+  isCollapsed: boolean
+  onToggleCollapsed: () => void
   dragLabel: string
   dragList: DragList
   dragIndex: number
@@ -472,9 +494,19 @@ function EditableCard({
           <span className="drag-handle" aria-label={dragLabel}>
             ::::
           </span>
-          <h3>{title}</h3>
+          <div>
+            <h3>{title}</h3>
+            <p>{summary || 'No core details yet'}</p>
+          </div>
         </div>
         <div className="row-actions">
+          <button
+            type="button"
+            className="icon-button"
+            onClick={onToggleCollapsed}
+          >
+            {isCollapsed ? 'Expand' : 'Collapse'}
+          </button>
           <button
             type="button"
             className="icon-button"
@@ -496,7 +528,7 @@ function EditableCard({
           </button>
         </div>
       </div>
-      {children}
+      {!isCollapsed && children}
     </article>
   )
 }

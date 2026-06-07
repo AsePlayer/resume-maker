@@ -154,6 +154,10 @@ button:disabled {
   background: #fbfcfe;
 }
 
+.editable-card:has(.card-header:last-child) {
+  gap: 0;
+}
+
 .editable-card[draggable='true'],
 .skill-editor-row[draggable='true'] {
   cursor: grab;
@@ -168,6 +172,13 @@ button:disabled {
   margin: 0;
   color: #4d5968;
   font-size: 14px;
+}
+
+.editable-card p {
+  margin: 4px 0 0;
+  color: #15181f;
+  font-size: 13px;
+  line-height: 1.35;
 }
 
 .card-title {
@@ -401,7 +412,7 @@ textarea {
 
   .row-actions {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   .row-actions button {
