@@ -466,7 +466,7 @@ function EditableCard({
             <p>{summary || 'No core details yet'}</p>
           </div>
         </div>
-        <div className="row-actions">
+        <div className="card-actions">
           <button
             type="button"
             className="icon-button"

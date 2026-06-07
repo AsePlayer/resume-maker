@@ -219,6 +219,18 @@ button:disabled {
   gap: 8px;
 }
 
+.card-actions {
+  display: grid;
+  grid-template-columns: minmax(84px, auto) minmax(74px, auto);
+  gap: 8px;
+}
+
+.card-actions button {
+  min-width: 0;
+  padding-inline: 9px;
+  white-space: nowrap;
+}
+
 .skill-list {
   display: grid;
   gap: 10px;
@@ -423,6 +435,10 @@ textarea {
 
   .skill-editor-row .row-actions {
     grid-column: 1 / -1;
+  }
+
+  .card-actions {
+    grid-template-columns: 1fr 1fr;
   }
 
   .row-actions {
