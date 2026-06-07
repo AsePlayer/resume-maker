@@ -5,12 +5,14 @@ type EditorPanelProps = {
   resume: Resume
   onFieldChange: (key: keyof Resume, value: string) => void
   onPrint: () => void
+  onReset: () => void
 }
 
 export function EditorPanel({
   resume,
   onFieldChange,
   onPrint,
+  onReset,
 }: EditorPanelProps) {
   return (
     <section className="editor-panel" aria-label="Resume editor">
@@ -19,9 +21,14 @@ export function EditorPanel({
           <p className="eyebrow">Resume Maker</p>
           <h1>Build a clean first draft</h1>
         </div>
-        <button type="button" onClick={onPrint}>
-          Print / PDF
-        </button>
+        <div className="panel-actions">
+          <button type="button" className="secondary-button" onClick={onReset}>
+            Reset
+          </button>
+          <button type="button" onClick={onPrint}>
+            Print / PDF
+          </button>
+        </div>
       </div>
 
       <div className="field-grid">

@@ -52,6 +52,23 @@ button:hover {
   border-color: #2f6f73;
 }
 
+.panel-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.secondary-button {
+  min-width: 72px;
+  background: #ffffff;
+  color: #15181f;
+}
+
+.secondary-button:hover {
+  background: #eef1f5;
+  border-color: #2f6f73;
+  color: #2f6f73;
+}
+
 .field-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -192,6 +209,14 @@ textarea:focus {
   .field-grid {
     grid-template-columns: 1fr;
     flex-direction: column;
+  }
+
+  .panel-actions {
+    width: 100%;
+  }
+
+  .panel-actions button {
+    flex: 1;
   }
 
   .resume-header h2 {
