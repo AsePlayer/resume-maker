@@ -28,13 +28,13 @@ Run automated checks:
 npm run verify
 ```
 
-Generate local PDF test outputs:
+Generate local text test outputs:
 
 ```powershell
-npm run test:pdf
+npm run test:output
 ```
 
-PDF outputs are written to `test-output/`, which is cleared at the start of each run.
+Text outputs are written to `test-output/`, which is cleared at the start of each run.
 
 ## Deployment
 
@@ -58,4 +58,4 @@ The app deploys to GitHub Pages from `main` using GitHub Actions.
 - Matching end years use start year as a tie breaker.
 - Unknown or unclear experience dates sort last.
 - Experience sorting does not mutate the original list.
-- PDF test outputs document expected sort and readable-text scenarios.
+- Text test outputs document expected sort and readable-text scenarios.

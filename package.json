@@ -9,9 +9,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:pdf": "node scripts/generate-test-pdfs.mjs",
+    "test:output": "node scripts/generate-test-output.mjs",
     "verify": "npm run lint && npm run test && npm run build",
-    "push:check": "npm run verify && npm run test:pdf"
+    "push:check": "npm run verify && npm run test:output"
   },
   "dependencies": {
     "react": "^19.2.6",
