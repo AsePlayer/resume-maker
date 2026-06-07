@@ -22,6 +22,20 @@ Create a production build:
 npm run build
 ```
 
+Run automated checks:
+
+```powershell
+npm run verify
+```
+
+Generate local PDF test outputs:
+
+```powershell
+npm run test:pdf
+```
+
+PDF outputs are written to `test-output/`, which is cleared at the start of each run.
+
 ## Deployment
 
 The app deploys to GitHub Pages from `main` using GitHub Actions.
@@ -36,3 +50,12 @@ The app deploys to GitHub Pages from `main` using GitHub Actions.
 - Drag-and-drop section reordering with button fallbacks
 - Browser print / PDF export
 - TypeScript data model for the resume shape
+
+## Test Coverage
+
+- Experience sorting places current roles first.
+- Completed experience sorts by latest end year.
+- Matching end years use start year as a tie breaker.
+- Unknown or unclear experience dates sort last.
+- Experience sorting does not mutate the original list.
+- PDF test outputs document expected sort and readable-text scenarios.

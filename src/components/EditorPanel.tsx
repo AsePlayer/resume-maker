@@ -7,6 +7,7 @@ import type {
   ResumeTextFieldKey,
   SkillItem,
 } from '../types/resume'
+import { sortExperienceNewestFirst } from '../utils/experienceSort'
 
 type EditorPanelProps = {
   resume: Resume
@@ -164,6 +165,13 @@ export function EditorPanel({
         <section className="editor-group">
           <GroupHeader
             title="Experience"
+            actionLabel="Sort newest first"
+            onAction={() =>
+              onResumeChange({
+                ...resume,
+                experience: sortExperienceNewestFirst(resume.experience),
+              })
+            }
             onAdd={() =>
               onResumeChange({
                 ...resume,
@@ -193,18 +201,6 @@ export function EditorPanel({
               dragList="experience"
               dragIndex={index}
               onDropItem={reorderExperience}
-              onMoveUp={() =>
-                onResumeChange({
-                  ...resume,
-                  experience: moveItem(resume.experience, index, -1),
-                })
-              }
-              onMoveDown={() =>
-                onResumeChange({
-                  ...resume,
-                  experience: moveItem(resume.experience, index, 1),
-                })
-              }
               onRemove={() =>
                 onResumeChange({
                   ...resume,
@@ -213,8 +209,6 @@ export function EditorPanel({
                   ),
                 })
               }
-              disableMoveUp={index === 0}
-              disableMoveDown={index === resume.experience.length - 1}
             >
               <div className="field-grid">
                 <Field
@@ -280,18 +274,6 @@ export function EditorPanel({
               dragList="education"
               dragIndex={index}
               onDropItem={reorderEducation}
-              onMoveUp={() =>
-                onResumeChange({
-                  ...resume,
-                  education: moveItem(resume.education, index, -1),
-                })
-              }
-              onMoveDown={() =>
-                onResumeChange({
-                  ...resume,
-                  education: moveItem(resume.education, index, 1),
-                })
-              }
               onRemove={() =>
                 onResumeChange({
                   ...resume,
@@ -300,8 +282,6 @@ export function EditorPanel({
                   ),
                 })
               }
-              disableMoveUp={index === 0}
-              disableMoveDown={index === resume.education.length - 1}
             >
               <div className="field-grid">
                 <Field
@@ -379,32 +359,6 @@ export function EditorPanel({
                 <div className="row-actions">
                   <button
                     type="button"
-                    className="icon-button"
-                    onClick={() =>
-                      onResumeChange({
-                        ...resume,
-                        skills: moveItem(resume.skills, index, -1),
-                      })
-                    }
-                    disabled={index === 0}
-                  >
-                    Up
-                  </button>
-                  <button
-                    type="button"
-                    className="icon-button"
-                    onClick={() =>
-                      onResumeChange({
-                        ...resume,
-                        skills: moveItem(resume.skills, index, 1),
-                      })
-                    }
-                    disabled={index === resume.skills.length - 1}
-                  >
-                    Down
-                  </button>
-                  <button
-                    type="button"
                     className="danger-button"
                     onClick={() =>
                       onResumeChange({
@@ -427,13 +381,34 @@ export function EditorPanel({
   )
 }
 
-function GroupHeader({ title, onAdd }: { title: string; onAdd: () => void }) {
+function GroupHeader({
+  title,
+  actionLabel,
+  onAction,
+  onAdd,
+}: {
+  title: string
+  actionLabel?: string
+  onAction?: () => void
+  onAdd: () => void
+}) {
   return (
     <div className="group-header">
       <h2>{title}</h2>
-      <button type="button" className="secondary-button" onClick={onAdd}>
-        Add
-      </button>
+      <div className="group-actions">
+        {actionLabel && onAction ? (
+          <button
+            type="button"
+            className="secondary-button"
+            onClick={onAction}
+          >
+            {actionLabel}
+          </button>
+        ) : null}
+        <button type="button" className="secondary-button" onClick={onAdd}>
+          Add
+        </button>
+      </div>
     </div>
   )
 }
@@ -448,11 +423,7 @@ function EditableCard({
   dragList,
   dragIndex,
   onDropItem,
-  onMoveUp,
-  onMoveDown,
   onRemove,
-  disableMoveUp,
-  disableMoveDown,
 }: {
   title: string
   summary: string
@@ -463,11 +434,7 @@ function EditableCard({
   dragList: DragList
   dragIndex: number
   onDropItem: (fromIndex: number, toIndex: number) => void
-  onMoveUp: () => void
-  onMoveDown: () => void
   onRemove: () => void
-  disableMoveUp: boolean
-  disableMoveDown: boolean
 }) {
   return (
     <article
@@ -507,22 +474,6 @@ function EditableCard({
           >
             {isCollapsed ? 'Expand' : 'Collapse'}
           </button>
-          <button
-            type="button"
-            className="icon-button"
-            onClick={onMoveUp}
-            disabled={disableMoveUp}
-          >
-            Up
-          </button>
-          <button
-            type="button"
-            className="icon-button"
-            onClick={onMoveDown}
-            disabled={disableMoveDown}
-          >
-            Down
-          </button>
           <button type="button" className="danger-button" onClick={onRemove}>
             Remove
           </button>
@@ -558,19 +509,6 @@ function Field({
       )}
     </label>
   )
-}
-
-function moveItem<Item>(items: Item[], currentIndex: number, direction: -1 | 1) {
-  const nextIndex = currentIndex + direction
-
-  if (nextIndex < 0 || nextIndex >= items.length) {
-    return items
-  }
-
-  const nextItems = [...items]
-  const [item] = nextItems.splice(currentIndex, 1)
-  nextItems.splice(nextIndex, 0, item)
-  return nextItems
 }
 
 function reorderItems<Item>(items: Item[], fromIndex: number, toIndex: number) {

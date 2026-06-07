@@ -145,6 +145,13 @@ button:disabled {
   align-items: center;
 }
 
+.group-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
 .editable-card {
   display: grid;
   gap: 14px;
@@ -400,6 +407,14 @@ textarea {
   .entry-heading {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .group-actions {
+    width: 100%;
+  }
+
+  .group-actions button {
+    flex: 1;
   }
 
   .skill-editor-row {

@@ -7,7 +7,11 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:pdf": "node scripts/generate-test-pdfs.mjs",
+    "verify": "npm run lint && npm run test && npm run build",
+    "push:check": "npm run verify && npm run test:pdf"
   },
   "dependencies": {
     "react": "^19.2.6",
@@ -25,6 +29,7 @@
     "globals": "^17.6.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
-    "vite": "^8.0.12"
+    "vite": "^8.0.12",
+    "vitest": "^4.1.8"
   }
 }
