@@ -3,6 +3,7 @@ import { ResumePreview } from '../components/ResumePreview'
 import { useResumeAutosave } from '../hooks/useResumeAutosave'
 import type { ResumeTextFieldKey } from '../types/resume'
 import { parseResumeJson, serializeResume } from '../utils/resumeData'
+import { printResume } from '../utils/printResume'
 import './App.css'
 
 function App() {
@@ -43,7 +44,7 @@ function App() {
         onFieldChange={updateField}
         onExport={exportResume}
         onImport={importResume}
-        onPrint={() => window.print()}
+        onPrint={() => printResume(resume)}
         onReset={resetResume}
       />
       <ResumePreview resume={resume} />

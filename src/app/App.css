@@ -186,13 +186,6 @@ button:disabled {
   font-size: 14px;
 }
 
-.editable-card p {
-  margin: 4px 0 0;
-  color: #15181f;
-  font-size: 13px;
-  line-height: 1.35;
-}
-
 .card-title {
   display: flex;
   gap: 10px;
@@ -200,10 +193,36 @@ button:disabled {
   min-width: 0;
 }
 
-.card-title p {
+.card-title > div {
+  min-width: 0;
+}
+
+.card-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.summary-chip {
+  max-width: 100%;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: #15181f;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.summary-chip:not(:last-child)::after {
+  color: #8b96a6;
+  content: " |";
+}
+
+.summary-chip.priority {
+  flex: 0 0 auto;
+  overflow: visible;
 }
 
 .drag-handle {
@@ -347,7 +366,7 @@ textarea {
 }
 
 .resume-section {
-  margin-top: 21px;
+  margin-top: 26px;
 }
 
 .resume-section h3 {
@@ -365,7 +384,11 @@ textarea {
 }
 
 .resume-entry {
-  margin-bottom: 14px;
+  margin-bottom: 18px;
+}
+
+.resume-entry:last-child {
+  margin-bottom: 0;
 }
 
 .entry-heading {
@@ -381,7 +404,7 @@ textarea {
 }
 
 .resume-section ul {
-  margin: 6px 0 0;
+  margin: 8px 0 0;
   padding-left: 19px;
 }
 
@@ -453,8 +476,12 @@ textarea {
     grid-template-columns: 1fr 1fr;
   }
 
-  .card-title p {
+  .summary-chip {
     white-space: normal;
+  }
+
+  .summary-chip.priority {
+    white-space: nowrap;
   }
 
   .row-actions {

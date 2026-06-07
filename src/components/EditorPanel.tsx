@@ -26,6 +26,11 @@ type DragData = {
   index: number
 }
 
+type SummaryPart = {
+  label: string
+  priority?: boolean
+}
+
 export function EditorPanel({
   resume,
   onResumeChange,
@@ -192,9 +197,11 @@ export function EditorPanel({
             <EditableCard
               key={item.id}
               title={`Experience ${index + 1}`}
-              summary={[item.role, item.company, item.dates]
-                .filter(Boolean)
-                .join(' | ')}
+              summaryParts={[
+                { label: item.role || 'No role yet' },
+                { label: item.company || 'No company yet' },
+                { label: item.dates || 'No dates yet', priority: true },
+              ]}
               isCollapsed={Boolean(collapsedCards[item.id])}
               onToggleCollapsed={() => toggleCollapsedCard(item.id)}
               dragLabel={`${item.role || 'Experience item'} drag handle`}
@@ -267,7 +274,10 @@ export function EditorPanel({
             <EditableCard
               key={item.id}
               title={`Education ${index + 1}`}
-              summary={[item.credential, item.school].filter(Boolean).join(' | ')}
+              summaryParts={[
+                { label: item.credential || 'No credential yet' },
+                { label: item.school || 'No school yet' },
+              ]}
               isCollapsed={Boolean(collapsedCards[item.id])}
               onToggleCollapsed={() => toggleCollapsedCard(item.id)}
               dragLabel={`${item.credential || 'Education item'} drag handle`}
@@ -415,7 +425,7 @@ function GroupHeader({
 
 function EditableCard({
   title,
-  summary,
+  summaryParts,
   children,
   isCollapsed,
   onToggleCollapsed,
@@ -426,7 +436,7 @@ function EditableCard({
   onRemove,
 }: {
   title: string
-  summary: string
+  summaryParts: SummaryPart[]
   children: ReactNode
   isCollapsed: boolean
   onToggleCollapsed: () => void
@@ -463,7 +473,16 @@ function EditableCard({
           </span>
           <div>
             <h3>{title}</h3>
-            <p>{summary || 'No core details yet'}</p>
+            <div className="card-summary">
+              {summaryParts.map((part) => (
+                <span
+                  className={part.priority ? 'summary-chip priority' : 'summary-chip'}
+                  key={part.label}
+                >
+                  {part.label}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
         <div className="card-actions">
