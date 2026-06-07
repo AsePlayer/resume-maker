@@ -35,7 +35,8 @@ h1 {
   line-height: 1.1;
 }
 
-button {
+button,
+.file-button {
   min-width: 116px;
   min-height: 40px;
   border: 1px solid #15181f;
@@ -47,26 +48,41 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+button:hover,
+.file-button:hover {
   background: #2f6f73;
   border-color: #2f6f73;
 }
 
 .panel-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
-.secondary-button {
+.secondary-button,
+.file-button {
   min-width: 72px;
   background: #ffffff;
   color: #15181f;
 }
 
-.secondary-button:hover {
+.secondary-button:hover,
+.file-button:hover {
   background: #eef1f5;
   border-color: #2f6f73;
   color: #2f6f73;
+}
+
+.file-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.file-button input {
+  display: none;
 }
 
 .danger-button,

@@ -27,5 +27,7 @@ npm run build
 - Editable resume fields
 - Live resume preview
 - Local browser autosave
+- Import / export resume JSON files
+- Structured experience, education, and skills sections
 - Browser print / PDF export
 - TypeScript data model for the resume shape

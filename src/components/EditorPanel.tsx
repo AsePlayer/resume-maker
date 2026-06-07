@@ -12,6 +12,8 @@ type EditorPanelProps = {
   resume: Resume
   onResumeChange: (resume: Resume) => void
   onFieldChange: (key: ResumeTextFieldKey, value: string) => void
+  onExport: () => void
+  onImport: (file: File) => void
   onPrint: () => void
   onReset: () => void
 }
@@ -20,6 +22,8 @@ export function EditorPanel({
   resume,
   onResumeChange,
   onFieldChange,
+  onExport,
+  onImport,
   onPrint,
   onReset,
 }: EditorPanelProps) {
@@ -64,6 +68,23 @@ export function EditorPanel({
           <h1>Build a clean first draft</h1>
         </div>
         <div className="panel-actions">
+          <label className="file-button">
+            Import
+            <input
+              type="file"
+              accept="application/json,.json"
+              onChange={(event) => {
+                const [file] = Array.from(event.target.files ?? [])
+                if (file) {
+                  onImport(file)
+                }
+                event.target.value = ''
+              }}
+            />
+          </label>
+          <button type="button" className="secondary-button" onClick={onExport}>
+            Export
+          </button>
           <button type="button" className="secondary-button" onClick={onReset}>
             Reset
           </button>
