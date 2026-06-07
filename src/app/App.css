@@ -69,6 +69,91 @@ button:hover {
   color: #2f6f73;
 }
 
+.danger-button,
+.icon-button {
+  min-width: 68px;
+  min-height: 34px;
+  padding: 6px 10px;
+  border-color: #c9d2de;
+  background: #ffffff;
+  color: #4c5564;
+  font-size: 13px;
+}
+
+.danger-button:hover {
+  border-color: #b42318;
+  background: #fff4f2;
+  color: #b42318;
+}
+
+.icon-button:hover {
+  border-color: #2f6f73;
+  background: #eef1f5;
+  color: #2f6f73;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.editor-stack {
+  display: grid;
+  gap: 24px;
+}
+
+.editor-group {
+  display: grid;
+  gap: 14px;
+}
+
+.editor-group h2 {
+  margin: 0;
+  color: #15181f;
+  font-size: 18px;
+}
+
+.group-header,
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.editable-card {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid #d8dee7;
+  border-radius: 8px;
+  background: #fbfcfd;
+}
+
+.editable-card h3 {
+  margin: 0;
+  color: #4c5564;
+  font-size: 14px;
+}
+
+.row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skill-list {
+  display: grid;
+  gap: 10px;
+}
+
+.skill-editor-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: end;
+}
+
 .field-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -179,8 +264,29 @@ textarea:focus {
   white-space: pre-wrap;
 }
 
-.bullet-line {
-  padding-left: 16px;
+.resume-entry {
+  margin-bottom: 14px;
+}
+
+.entry-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: #15181f;
+}
+
+.entry-heading span {
+  color: #4c5564;
+  white-space: nowrap;
+}
+
+.resume-section ul {
+  margin: 6px 0 0;
+  padding-left: 20px;
+}
+
+.resume-section li {
+  margin-bottom: 4px;
 }
 
 @media (max-width: 980px) {
@@ -217,6 +323,26 @@ textarea:focus {
 
   .panel-actions button {
     flex: 1;
+  }
+
+  .group-header,
+  .card-header,
+  .entry-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .skill-editor-row {
+    grid-template-columns: 1fr;
+  }
+
+  .row-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .row-actions button {
+    min-width: 0;
   }
 
   .resume-header h2 {

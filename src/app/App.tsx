@@ -1,13 +1,13 @@
 import { EditorPanel } from '../components/EditorPanel'
 import { ResumePreview } from '../components/ResumePreview'
 import { useResumeAutosave } from '../hooks/useResumeAutosave'
-import type { Resume } from '../types/resume'
+import type { ResumeTextFieldKey } from '../types/resume'
 import './App.css'
 
 function App() {
   const { resume, setResume, resetResume } = useResumeAutosave()
 
-  const updateField = (key: keyof Resume, value: string) => {
+  const updateField = (key: ResumeTextFieldKey, value: string) => {
     setResume((current) => ({ ...current, [key]: value }))
   }
 
@@ -15,6 +15,7 @@ function App() {
     <main className="app-shell">
       <EditorPanel
         resume={resume}
+        onResumeChange={setResume}
         onFieldChange={updateField}
         onPrint={() => window.print()}
         onReset={resetResume}

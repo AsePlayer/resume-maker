@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import type { Resume } from '../types/resume'
-import { ResumeSection } from './ResumeSection'
 
 type ResumePreviewProps = {
   resume: Resume
@@ -24,10 +23,61 @@ export function ResumePreview({ resume }: ResumePreviewProps) {
           <p className="contact-line">{contactLine}</p>
         </header>
 
-        <ResumeSection title="Summary" content={resume.summary} />
-        <ResumeSection title="Experience" content={resume.experience} />
-        <ResumeSection title="Education" content={resume.education} />
-        <ResumeSection title="Skills" content={resume.skills} />
+        <section className="resume-section">
+          <h3>Summary</h3>
+          <p>{resume.summary}</p>
+        </section>
+
+        <section className="resume-section">
+          <h3>Experience</h3>
+          {resume.experience.map((item) => (
+            <div className="resume-entry" key={item.id}>
+              <div className="entry-heading">
+                <strong>
+                  {[item.role, item.company].filter(Boolean).join(' - ')}
+                </strong>
+                <span>{item.dates}</span>
+              </div>
+              <ul>
+                {item.details
+                  .filter((detail) => detail.trim())
+                  .map((detail, index) => (
+                    <li key={`${item.id}-${index}`}>{detail}</li>
+                  ))}
+              </ul>
+            </div>
+          ))}
+        </section>
+
+        <section className="resume-section">
+          <h3>Education</h3>
+          {resume.education.map((item) => (
+            <div className="resume-entry" key={item.id}>
+              <div className="entry-heading">
+                <strong>
+                  {[item.credential, item.school].filter(Boolean).join(' - ')}
+                </strong>
+              </div>
+              <ul>
+                {item.details
+                  .filter((detail) => detail.trim())
+                  .map((detail, index) => (
+                    <li key={`${item.id}-${index}`}>{detail}</li>
+                  ))}
+              </ul>
+            </div>
+          ))}
+        </section>
+
+        <section className="resume-section">
+          <h3>Skills</h3>
+          <p>
+            {resume.skills
+              .map((skill) => skill.name.trim())
+              .filter(Boolean)
+              .join(', ')}
+          </p>
+        </section>
       </article>
     </section>
   )
