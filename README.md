@@ -22,6 +22,10 @@ Create a production build:
 npm run build
 ```
 
+## Deployment
+
+The app deploys to GitHub Pages from `main` using GitHub Actions.
+
 ## Current Features
 
 - Editable resume fields
